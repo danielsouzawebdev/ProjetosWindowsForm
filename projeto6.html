@@ -1,0 +1,59 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Projeto 6 · C# POO e Windows Forms</title><link rel="stylesheet" href="style.css"></head><body><header><nav><a class="logo" href="index.html">🧩 C# · POO &amp; Windows Forms</a><a href="conceitos.html">Conceitos</a><a href="windowsforms.html">Windows Forms</a><a href="index.html#projetos">Projetos</a></nav></header><main><span class="tag">Intermediário</span><h1>Projeto 6 · Contas Bancárias</h1><p><b>Objetivo:</b> criar contas diferentes reaproveitando uma classe base.</p><div class="steps"><div class="step"><h3>Tela</h3><p><code>txtTitular</code>, <code>txtValor</code>, <code>cmbTipo</code> (Corrente, Poupança), <code>btnCriar</code>, <code>btnDepositar</code>, <code>btnSacar</code>, <code>dgvContas</code>.</p></div><div class="step"><h3>Classe base <code>Conta</code></h3><pre><code>public class Conta
+{
+    public string Titular { get; set; }
+
+    // protected set: a classe e suas FILHAS podem alterar o saldo.
+    public decimal Saldo { get; protected set; }
+
+    public void Depositar(decimal valor)
+    {
+        if (valor &gt; 0) Saldo += valor;
+    }
+
+    // virtual: permite que as classes filhas REESCREVAM este método.
+    public virtual bool Sacar(decimal valor)
+    {
+        if (valor &lt;= 0 || valor &gt; Saldo) return false;
+        Saldo -= valor;
+        return true;
+    }
+}</code></pre></div><div class="step"><h3>Classes filhas</h3><pre><code>// &quot;: Conta&quot; significa HERANÇA: ContaCorrente já tem Titular, Saldo, Depositar...
+public class ContaCorrente : Conta
+{
+    public decimal Limite { get; set; } = 500;
+
+    // override: mesma assinatura, comportamento próprio (cheque especial).
+    public override bool Sacar(decimal valor)
+    {
+        if (valor &lt;= 0 || valor &gt; Saldo + Limite) return false;
+        Saldo -= valor;
+        return true;
+    }
+}
+
+public class ContaPoupanca : Conta
+{
+    // Método exclusivo da poupança.
+    public void Rendimento(decimal taxa) =&gt; Saldo += Saldo * taxa;
+}</code></pre></div><div class="step"><h3>Formulário</h3><pre><code>// A lista é de Conta, mas aceita QUALQUER filha de Conta.
+BindingList&lt;Conta&gt; contas = new BindingList&lt;Conta&gt;();
+
+private void btnCriar_Click(object sender, EventArgs e)
+{
+    Conta c;
+    if (cmbTipo.Text == &quot;Corrente&quot;) c = new ContaCorrente();
+    else                            c = new ContaPoupanca();
+    c.Titular = txtTitular.Text;
+    contas.Add(c);
+}
+
+private void btnSacar_Click(object sender, EventArgs e)
+{
+    Conta c = (Conta)dgvContas.CurrentRow.DataBoundItem;
+
+    // POLIMORFISMO: chamamos Sacar() sem saber o tipo exato;
+    // o C# executa a versão correta (corrente ou poupança).
+    if (!c.Sacar(decimal.Parse(txtValor.Text)))
+        MessageBox.Show(&quot;Saque não permitido.&quot;);
+    dgvContas.Refresh();
+}</code></pre></div></div><div class="tip">💡 Em <code>Form1_Load</code> faça <code>dgvContas.DataSource = contas;</code> como no projeto anterior.</div><div class="desafio">🏆 <b>Desafio:</b> Crie <code>ContaSalario</code> que não aceita depósito comum e um botão “Rendimento” só para poupanças (dica: <code>is ContaPoupanca</code>).</div><div class="pager"><a href="projeto5.html">← Projeto 5</a><a href="projeto7.html">Projeto 7 →</a></div></main><footer>Material autoinstrucional · Desenvolvimento de Sistemas · C#</footer></body></html>

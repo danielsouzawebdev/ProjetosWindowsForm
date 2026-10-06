@@ -1,0 +1,33 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Projeto 1 · C# POO e Windows Forms</title><link rel="stylesheet" href="style.css"></head><body><header><nav><a class="logo" href="index.html">🧩 C# · POO &amp; Windows Forms</a><a href="conceitos.html">Conceitos</a><a href="windowsforms.html">Windows Forms</a><a href="index.html#projetos">Projetos</a></nav></header><main><span class="tag">Iniciante</span><h1>Projeto 1 · Cadastro de Pessoa</h1><p><b>Objetivo:</b> criar a classe <code>Pessoa</code> e usá-la em um formulário.</p><div class="steps"><div class="step"><h3>Crie o projeto</h3><p>Novo projeto → Aplicativo do Windows Forms → <code>CadastroPessoa</code>.</p></div><div class="step"><h3>Monte a tela</h3><p>Na Toolbox, arraste para o formulário 2 <code>Label</code>, 2 <code>TextBox</code>, 1 <code>Button</code> e mais 1 <code>Label</code>. Na janela Propriedades: Labels → <code>Text</code> = “Nome:” e “Idade:”; TextBoxes → <code>Name</code> = <code>txtNome</code> e <code>txtIdade</code>; Button → <code>Name</code> = <code>btnCadastrar</code>, <code>Text</code> = “Cadastrar”; Label de resultado → <code>Name</code> = <code>lblResultado</code>, <code>Text</code> vazio. Dúvidas? Veja o guia de <a href='windowsforms.html'>Windows Forms</a>.</p></div><div class="step"><h3>Crie a classe <code>Pessoa.cs</code></h3><pre><code>// Uma CLASSE é o molde: define quais dados e ações todo objeto &quot;Pessoa&quot; terá.
+public class Pessoa
+{
+    // PROPRIEDADES: guardam os dados do objeto.
+    // { get; set; } permite ler (get) e alterar (set) o valor.
+    public string Nome { get; set; }
+    public int Idade { get; set; }
+
+    // CONSTRUTOR: método especial, tem o mesmo nome da classe.
+    // Roda automaticamente quando fazemos &quot;new Pessoa(...)&quot;.
+    public Pessoa(string nome, int idade)
+    {
+        Nome = nome;   // guarda o valor recebido na propriedade
+        Idade = idade;
+    }
+
+    // MÉTODO: uma ação do objeto. Aqui ele devolve (return) um texto.
+    public string Apresentar()
+    {
+        // $&quot;...&quot; é interpolação: coloca variáveis dentro do texto com { }.
+        return $&quot;Olá, eu sou {Nome} e tenho {Idade} anos.&quot;;
+    }
+}</code></pre></div><div class="step"><h3>Programe o botão</h3><pre><code>private void btnCadastrar_Click(object sender, EventArgs e)
+{
+    // Tudo que vem de um TextBox é texto (string); convertemos para número.
+    int idade = int.Parse(txtIdade.Text);
+
+    // &quot;new&quot; cria o OBJETO a partir da classe, chamando o construtor.
+    Pessoa p = new Pessoa(txtNome.Text, idade);
+
+    // Chamamos o método do objeto e mostramos o retorno na tela.
+    lblResultado.Text = p.Apresentar();
+}</code></pre></div><div class="step"><h3>Teste</h3><p>Pressione <b>F5</b>. Digite letras na idade: o programa quebra! Isso será resolvido no Projeto 2.</p></div></div><div class="tip">💡 Classe = molde; objeto = item criado com <code>new</code>. Você pode criar vários objetos da mesma classe.</div><div class="desafio">🏆 <b>Desafio:</b> Adicione <code>EhMaiorDeIdade()</code> retornando <code>bool</code> e exiba “maior” ou “menor” de idade.</div><div class="pager"><a href="windowsforms.html">← Windows Forms</a><a href="projeto2.html">Projeto 2 →</a></div></main><footer>Material autoinstrucional · Desenvolvimento de Sistemas · C#</footer></body></html>

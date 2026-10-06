@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Projeto 4 · C# POO e Windows Forms</title><link rel="stylesheet" href="style.css"></head><body><header><nav><a class="logo" href="index.html">🧩 C# · POO &amp; Windows Forms</a><a href="conceitos.html">Conceitos</a><a href="windowsforms.html">Windows Forms</a><a href="index.html#projetos">Projetos</a></nav></header><main><span class="tag">Intermediário</span><h1>Projeto 4 · Lista de Tarefas</h1><p><b>Objetivo:</b> guardar vários objetos em uma coleção e exibi-los.</p><div class="steps"><div class="step"><h3>Tela</h3><p><code>txtTarefa</code>, <code>btnAdicionar</code>, <code>lstTarefas</code> (ListBox), <code>btnConcluir</code>, <code>btnRemover</code>.</p></div><div class="step"><h3>Classe <code>Tarefa</code></h3><pre><code>public class Tarefa
+{
+    public string Descricao { get; set; }
+    public bool Concluida { get; set; }   // começa como false
+
+    // override: troca o comportamento herdado de object.
+    // O ListBox usa o ToString() para decidir o que mostrar na lista.
+    public override string ToString()
+    {
+        return (Concluida ? &quot;[X] &quot; : &quot;[  ] &quot;) + Descricao; // ? : é um if curto
+    }
+}</code></pre></div><div class="step"><h3>Formulário</h3><pre><code>// List&lt;Tarefa&gt; é uma lista que só aceita objetos do tipo Tarefa.
+// Declarada fora dos métodos para existir enquanto o form estiver aberto.
+List&lt;Tarefa&gt; tarefas = new List&lt;Tarefa&gt;();
+
+private void btnAdicionar_Click(object sender, EventArgs e)
+{
+    if (string.IsNullOrWhiteSpace(txtTarefa.Text)) return; // ignora vazio
+
+    tarefas.Add(new Tarefa { Descricao = txtTarefa.Text }); // adiciona na lista
+    txtTarefa.Clear();
+    AtualizarLista();
+}
+
+private void btnConcluir_Click(object sender, EventArgs e)
+{
+    // SelectedItem devolve object; &quot;as Tarefa&quot; converte de volta ao tipo certo.
+    Tarefa t = lstTarefas.SelectedItem as Tarefa;
+    if (t == null) return;       // nada selecionado
+    t.Concluida = true;
+    AtualizarLista();
+}
+
+private void btnRemover_Click(object sender, EventArgs e)
+{
+    Tarefa t = lstTarefas.SelectedItem as Tarefa;
+    if (t != null) tarefas.Remove(t);
+    AtualizarLista();
+}
+
+// Método auxiliar: reconstrói o ListBox a partir da lista.
+private void AtualizarLista()
+{
+    lstTarefas.Items.Clear();
+    foreach (Tarefa t in tarefas)      // foreach percorre item por item
+        lstTarefas.Items.Add(t);
+}</code></pre></div></div><div class="tip">💡 Separe <b>dados</b> (a lista) de <b>exibição</b> (o ListBox) e use um método como <code>AtualizarLista()</code> para sincronizar.</div><div class="desafio">🏆 <b>Desafio:</b> Crie um <code>Label</code> com o contador “X de Y concluídas”.</div><div class="pager"><a href="projeto3.html">← Projeto 3</a><a href="projeto5.html">Projeto 5 →</a></div></main><footer>Material autoinstrucional · Desenvolvimento de Sistemas · C#</footer></body></html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Projeto 7 · C# POO e Windows Forms</title><link rel="stylesheet" href="style.css"></head><body><header><nav><a class="logo" href="index.html">🧩 C# · POO &amp; Windows Forms</a><a href="conceitos.html">Conceitos</a><a href="windowsforms.html">Windows Forms</a><a href="index.html#projetos">Projetos</a></nav></header><main><span class="tag">Intermediário</span><h1>Projeto 7 · Formas Geométricas</h1><p><b>Objetivo:</b> definir um contrato comum com <code>abstract</code>.</p><div class="steps"><div class="step"><h3>Tela</h3><p><code>cmbForma</code> (Círculo, Retângulo), <code>txtA</code>, <code>txtB</code>, <code>btnCalcular</code>, <code>lstFormas</code>.</p></div><div class="step"><h3>Classes</h3><pre><code>// abstract: não pode ser instanciada (new Forma() dá erro).
+// Serve apenas de modelo para as filhas.
+public abstract class Forma
+{
+    public string Nome { get; protected set; }
+
+    // abstract: sem corpo. TODA filha é OBRIGADA a implementar.
+    public abstract double Area();
+    public abstract double Perimetro();
+
+    public override string ToString() =&gt;
+        $&quot;{Nome}: área {Area():F2} | perímetro {Perimetro():F2}&quot;;
+}
+
+public class Circulo : Forma
+{
+    private double raio;
+    public Circulo(double raio) { this.raio = raio; Nome = &quot;Círculo&quot;; }
+
+    public override double Area()      =&gt; Math.PI * raio * raio;
+    public override double Perimetro() =&gt; 2 * Math.PI * raio;
+}
+
+public class Retangulo : Forma
+{
+    private double largura, altura;
+    public Retangulo(double l, double a) { largura = l; altura = a; Nome = &quot;Retângulo&quot;; }
+
+    public override double Area()      =&gt; largura * altura;
+    public override double Perimetro() =&gt; 2 * (largura + altura);
+}</code></pre></div><div class="step"><h3>Botão</h3><pre><code>private void btnCalcular_Click(object sender, EventArgs e)
+{
+    double a = double.Parse(txtA.Text);
+    double b = string.IsNullOrEmpty(txtB.Text) ? 0 : double.Parse(txtB.Text);
+
+    // A variável é do tipo Forma, mas guarda um Circulo ou Retangulo.
+    Forma f = cmbForma.Text == &quot;Círculo&quot; ? new Circulo(a) : new Retangulo(a, b);
+
+    lstFormas.Items.Add(f); // exibe usando o ToString() de cada forma
+}</code></pre></div></div><div class="tip">💡 Classe abstrata = contrato obrigatório. Quem usa <code>Forma</code> não precisa saber qual é a forma real.</div><div class="desafio">🏆 <b>Desafio:</b> Crie a classe <code>Triangulo</code> (base e altura; perímetro com 3 lados) e adicione ao ComboBox.</div><div class="pager"><a href="projeto6.html">← Projeto 6</a><a href="projeto8.html">Projeto 8 →</a></div></main><footer>Material autoinstrucional · Desenvolvimento de Sistemas · C#</footer></body></html>

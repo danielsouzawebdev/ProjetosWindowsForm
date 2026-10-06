@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Projeto 9 · C# POO e Windows Forms</title><link rel="stylesheet" href="style.css"></head><body><header><nav><a class="logo" href="index.html">🧩 C# · POO &amp; Windows Forms</a><a href="conceitos.html">Conceitos</a><a href="windowsforms.html">Windows Forms</a><a href="index.html#projetos">Projetos</a></nav></header><main><span class="tag">Avançado</span><h1>Projeto 9 · Jogo de Adivinhação</h1><p><b>Objetivo:</b> modelar um jogo cuja classe lembra o próprio estado.</p><div class="steps"><div class="step"><h3>Tela</h3><p><code>txtPalpite</code>, <code>btnTentar</code>, <code>btnNovoJogo</code>, <code>lblDica</code>, <code>lblTentativas</code>.</p></div><div class="step"><h3>Classe <code>Jogo</code></h3><pre><code>// enum: conjunto fixo de valores com nome. Mais legível que 0, 1, 2.
+public enum Resultado { Acertou, MuitoBaixo, MuitoAlto }
+
+public class Jogo
+{
+    private int numeroSecreto;
+    private static Random sorteio = new Random(); // um só Random para todos
+
+    public int Tentativas { get; private set; }   // o objeto lembra seu estado
+
+    public Jogo()
+    {
+        numeroSecreto = sorteio.Next(1, 101);     // sorteia de 1 a 100
+    }
+
+    public Resultado Tentar(int palpite)
+    {
+        Tentativas++;                              // conta mais uma tentativa
+        if (palpite == numeroSecreto) return Resultado.Acertou;
+        if (palpite &lt; numeroSecreto)  return Resultado.MuitoBaixo;
+        return Resultado.MuitoAlto;
+    }
+}</code></pre></div><div class="step"><h3>Formulário</h3><pre><code>Jogo jogo = new Jogo();    // já começa com um jogo novo
+
+private void btnTentar_Click(object sender, EventArgs e)
+{
+    if (!int.TryParse(txtPalpite.Text, out int palpite)) return;
+
+    Resultado r = jogo.Tentar(palpite);
+
+    switch (r)
+    {
+        case Resultado.Acertou:    lblDica.Text = &quot;🎉 Acertou!&quot;; break;
+        case Resultado.MuitoBaixo: lblDica.Text = &quot;Tente um número MAIOR&quot;; break;
+        case Resultado.MuitoAlto:  lblDica.Text = &quot;Tente um número MENOR&quot;; break;
+    }
+    lblTentativas.Text = &quot;Tentativas: &quot; + jogo.Tentativas;
+}
+
+private void btnNovoJogo_Click(object sender, EventArgs e)
+{
+    jogo = new Jogo();     // novo objeto = estado zerado
+    lblDica.Text = &quot;&quot;;
+    lblTentativas.Text = &quot;Tentativas: 0&quot;;
+}</code></pre></div></div><div class="tip">💡 Cada objeto tem seu <b>estado</b>. Criar outro <code>Jogo</code> reinicia tudo sem precisar “limpar” variáveis.</div><div class="desafio">🏆 <b>Desafio:</b> Limite a 7 tentativas: se estourar, mostre o número secreto (crie a propriedade necessária).</div><div class="pager"><a href="projeto8.html">← Projeto 8</a><a href="projeto10.html">Projeto 10 →</a></div></main><footer>Material autoinstrucional · Desenvolvimento de Sistemas · C#</footer></body></html>

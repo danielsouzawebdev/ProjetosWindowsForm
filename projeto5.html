@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Projeto 5 · C# POO e Windows Forms</title><link rel="stylesheet" href="style.css"></head><body><header><nav><a class="logo" href="index.html">🧩 C# · POO &amp; Windows Forms</a><a href="conceitos.html">Conceitos</a><a href="windowsforms.html">Windows Forms</a><a href="index.html#projetos">Projetos</a></nav></header><main><span class="tag">Intermediário</span><h1>Projeto 5 · Controle de Estoque</h1><p><b>Objetivo:</b> fazer a classe proteger a regra: estoque nunca fica negativo.</p><div class="steps"><div class="step"><h3>Tela</h3><p><code>txtNome</code>, <code>txtQtd</code>, <code>btnNovo</code>, <code>btnEntrada</code>, <code>btnSaida</code>, <code>dgvProdutos</code> (DataGridView).</p></div><div class="step"><h3>Classe <code>Produto</code></h3><pre><code>public class Produto
+{
+    public string Nome { get; set; }
+
+    // &quot;private set&quot;: qualquer um lê a quantidade, mas só a classe altera.
+    public int Quantidade { get; private set; }
+
+    // Propriedade calculada: sem campo, só get.
+    public string Situacao =&gt; Quantidade &lt; 5 ? &quot;ESTOQUE BAIXO&quot; : &quot;OK&quot;;
+
+    public void Entrada(int qtd)
+    {
+        if (qtd &gt; 0) Quantidade += qtd;
+    }
+
+    // Retorna bool para informar se a operação deu certo.
+    public bool Saida(int qtd)
+    {
+        if (qtd &lt;= 0 || qtd &gt; Quantidade) return false; // regra de negócio
+        Quantidade -= qtd;
+        return true;
+    }
+}</code></pre></div><div class="step"><h3>Formulário</h3><pre><code>// BindingList atualiza o DataGridView sozinho quando a lista muda.
+BindingList&lt;Produto&gt; produtos = new BindingList&lt;Produto&gt;();
+
+private void Form1_Load(object sender, EventArgs e)
+{
+    dgvProdutos.DataSource = produtos;   // liga a grade à lista
+}
+
+private void btnNovo_Click(object sender, EventArgs e)
+{
+    produtos.Add(new Produto { Nome = txtNome.Text });
+}
+
+private void btnSaida_Click(object sender, EventArgs e)
+{
+    Produto p = (Produto)dgvProdutos.CurrentRow.DataBoundItem; // objeto da linha
+    if (!p.Saida(int.Parse(txtQtd.Text)))
+        MessageBox.Show(&quot;Quantidade indisponível!&quot;);
+    dgvProdutos.Refresh();   // redesenha para mostrar o novo valor
+}</code></pre></div></div><div class="tip">💡 Regras importantes ficam <b>na classe</b>, não no botão. Assim qualquer tela que use <code>Produto</code> respeita a regra. (Precisa de <code>using System.ComponentModel;</code>.)</div><div class="desafio">🏆 <b>Desafio:</b> Implemente <code>btnEntrada_Click</code> e pinte de vermelho as linhas com estoque baixo.</div><div class="pager"><a href="projeto4.html">← Projeto 4</a><a href="projeto6.html">Projeto 6 →</a></div></main><footer>Material autoinstrucional · Desenvolvimento de Sistemas · C#</footer></body></html>

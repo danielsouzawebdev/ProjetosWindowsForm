@@ -1,0 +1,64 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Projeto 2 · C# POO e Windows Forms</title><link rel="stylesheet" href="style.css"></head><body><header><nav><a class="logo" href="index.html">🧩 C# · POO &amp; Windows Forms</a><a href="conceitos.html">Conceitos</a><a href="windowsforms.html">Windows Forms</a><a href="index.html#projetos">Projetos</a></nav></header><main><span class="tag">Iniciante</span><h1>Projeto 2 · Calculadora de IMC</h1><p><b>Objetivo:</b> proteger os dados da classe com <code>private</code> e validar valores.</p><div class="steps"><div class="step"><h3>Tela</h3><p><code>txtPeso</code>, <code>txtAltura</code>, <code>btnCalcular</code>, <code>lblIMC</code>, <code>lblClassificacao</code>.</p></div><div class="step"><h3>Classe <code>Paciente</code></h3><pre><code>public class Paciente
+{
+    // CAMPOS PRIVADOS: só a própria classe enxerga. Isso é ENCAPSULAMENTO.
+    private double peso;
+    private double altura;
+
+    // A propriedade é a &quot;porta de entrada&quot; controlada para o campo.
+    public double Peso
+    {
+        get { return peso; }
+        set
+        {
+            // &quot;value&quot; é o valor que alguém tentou atribuir.
+            if (value &lt;= 0)
+                throw new ArgumentException(&quot;Peso inválido&quot;); // interrompe e avisa o erro
+            peso = value;
+        }
+    }
+
+    public double Altura
+    {
+        get { return altura; }
+        set
+        {
+            if (value &lt;= 0)
+                throw new ArgumentException(&quot;Altura inválida&quot;);
+            altura = value;
+        }
+    }
+
+    // &quot;=&gt;&quot; é uma forma curta de escrever um método de uma linha.
+    public double CalcularIMC() =&gt; peso / (altura * altura);
+
+    public string Classificar()
+    {
+        double imc = CalcularIMC();
+        if (imc &lt; 18.5) return &quot;Abaixo do peso&quot;;
+        if (imc &lt; 25)   return &quot;Peso normal&quot;;
+        if (imc &lt; 30)   return &quot;Sobrepeso&quot;;
+        return &quot;Obesidade&quot;;
+    }
+}</code></pre></div><div class="step"><h3>Botão com tratamento de erros</h3><pre><code>private void btnCalcular_Click(object sender, EventArgs e)
+{
+    // TryParse tenta converter SEM quebrar. Retorna false se não for número.
+    // &quot;out double peso&quot; recebe o valor convertido.
+    if (!double.TryParse(txtPeso.Text, out double peso) ||
+        !double.TryParse(txtAltura.Text, out double altura))
+    {
+        MessageBox.Show(&quot;Digite apenas números.&quot;);
+        return; // sai do método
+    }
+
+    try // tenta executar...
+    {
+        // Inicializador de objeto: define as propriedades na criação.
+        Paciente p = new Paciente { Peso = peso, Altura = altura };
+        lblIMC.Text = p.CalcularIMC().ToString(&quot;F2&quot;); // F2 = 2 casas decimais
+        lblClassificacao.Text = p.Classificar();
+    }
+    catch (ArgumentException ex) // ...e se a classe lançar erro, cai aqui
+    {
+        MessageBox.Show(ex.Message);
+    }
+}</code></pre></div></div><div class="tip">💡 Com <code>private</code>, ninguém de fora coloca um valor inválido: a classe protege os próprios dados.</div><div class="desafio">🏆 <b>Desafio:</b> Adicione <code>Nome</code> ao paciente e um botão “Limpar” que zera os campos.</div><div class="pager"><a href="projeto1.html">← Projeto 1</a><a href="projeto3.html">Projeto 3 →</a></div></main><footer>Material autoinstrucional · Desenvolvimento de Sistemas · C#</footer></body></html>

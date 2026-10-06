@@ -1,0 +1,65 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Projeto 10 · C# POO e Windows Forms</title><link rel="stylesheet" href="style.css"></head><body><header><nav><a class="logo" href="index.html">🧩 C# · POO &amp; Windows Forms</a><a href="conceitos.html">Conceitos</a><a href="windowsforms.html">Windows Forms</a><a href="index.html#projetos">Projetos</a></nav></header><main><span class="tag">Avançado</span><h1>Projeto 10 · Boletim Escolar</h1><p><b>Objetivo:</b> juntar tudo: classes que contêm outras, cálculos e validação.</p><div class="steps"><div class="step"><h3>Tela</h3><p><code>txtAluno</code>, <code>btnCriarAluno</code>, <code>txtNota</code>, <code>btnAddNota</code>, <code>lstNotas</code>, <code>lblMedia</code>, <code>lblSituacao</code>.</p></div><div class="step"><h3>Classe <code>Aluno</code></h3><pre><code>using System.Linq;
+
+public class Aluno
+{
+    public string Nome { get; set; }
+
+    // COMPOSIÇÃO: o aluno &quot;tem&quot; uma lista de notas.
+    // IReadOnlyList impede que de fora alterem a lista sem passar pelas regras.
+    private List&lt;double&gt; notas = new List&lt;double&gt;();
+    public IReadOnlyList&lt;double&gt; Notas =&gt; notas;
+
+    public void AdicionarNota(double nota)
+    {
+        if (nota &lt; 0 || nota &gt; 10)
+            throw new ArgumentException(&quot;A nota deve estar entre 0 e 10.&quot;);
+        notas.Add(nota);
+    }
+
+    // Propriedade calculada: sempre reflete as notas atuais.
+    public double Media =&gt; notas.Count == 0 ? 0 : notas.Average();
+
+    public string Situacao
+    {
+        get
+        {
+            if (notas.Count == 0)  return &quot;Sem notas&quot;;
+            if (Media &gt;= 7)        return &quot;Aprovado&quot;;
+            if (Media &gt;= 5)        return &quot;Recuperação&quot;;
+            return &quot;Reprovado&quot;;
+        }
+    }
+}</code></pre></div><div class="step"><h3>Formulário</h3><pre><code>Aluno aluno;   // ainda null: nenhum aluno criado
+
+private void btnCriarAluno_Click(object sender, EventArgs e)
+{
+    aluno = new Aluno { Nome = txtAluno.Text };
+    lstNotas.Items.Clear();
+    AtualizarResumo();
+}
+
+private void btnAddNota_Click(object sender, EventArgs e)
+{
+    if (aluno == null)   // evita erro de referência nula
+    {
+        MessageBox.Show(&quot;Crie o aluno primeiro.&quot;);
+        return;
+    }
+    try
+    {
+        double nota = double.Parse(txtNota.Text);
+        aluno.AdicionarNota(nota);
+        lstNotas.Items.Add(nota);
+        AtualizarResumo();
+    }
+    catch (Exception ex)   // pega erro de formato E a regra da classe
+    {
+        MessageBox.Show(ex.Message);
+    }
+}
+
+private void AtualizarResumo()
+{
+    lblMedia.Text = $&quot;Média: {aluno.Media:F1}&quot;;
+    lblSituacao.Text = aluno.Situacao;
+}</code></pre></div></div><div class="tip">💡 Projeto final: ele reúne classes, encapsulamento, validação, coleções e tratamento de erros.</div><div class="desafio">🏆 <b>Desafio:</b> Crie a classe <code>Turma</code>, que contém vários <code>Aluno</code>, e mostre a média geral. Depois salve os dados em um arquivo de texto.</div><div class="pager"><a href="projeto9.html">← Projeto 9</a><a href="index.html">Início ↑</a></div></main><footer>Material autoinstrucional · Desenvolvimento de Sistemas · C#</footer></body></html>

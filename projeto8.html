@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Projeto 8 · C# POO e Windows Forms</title><link rel="stylesheet" href="style.css"></head><body><header><nav><a class="logo" href="index.html">🧩 C# · POO &amp; Windows Forms</a><a href="conceitos.html">Conceitos</a><a href="windowsforms.html">Windows Forms</a><a href="index.html#projetos">Projetos</a></nav></header><main><span class="tag">Avançado</span><h1>Projeto 8 · Agenda de Contatos</h1><p><b>Objetivo:</b> criar uma classe repositório que gerencia a lista e faz buscas.</p><div class="steps"><div class="step"><h3>Tela</h3><p><code>txtNome</code>, <code>txtTelefone</code>, <code>txtBusca</code>, <code>btnSalvar</code>, <code>btnRemover</code>, <code>dgvContatos</code>.</p></div><div class="step"><h3>Classes</h3><pre><code>public class Contato
+{
+    public string Nome { get; set; }
+    public string Telefone { get; set; }
+}
+
+// Esta classe cuida SÓ do armazenamento e da busca.
+// O formulário cuida SÓ da tela. Cada classe, uma responsabilidade.
+public class AgendaRepositorio
+{
+    private List&lt;Contato&gt; contatos = new List&lt;Contato&gt;();
+
+    public void Adicionar(Contato c) =&gt; contatos.Add(c);
+    public void Remover(Contato c)   =&gt; contatos.Remove(c);
+
+    public List&lt;Contato&gt; Buscar(string termo)
+    {
+        // LINQ: consulta a lista de forma declarativa.
+        // Where filtra; OrderBy ordena; ToList materializa o resultado.
+        return contatos
+            .Where(c =&gt; c.Nome.ToLower().Contains(termo.ToLower()))
+            .OrderBy(c =&gt; c.Nome)
+            .ToList();
+    }
+}</code></pre></div><div class="step"><h3>Formulário</h3><pre><code>AgendaRepositorio agenda = new AgendaRepositorio();
+
+private void btnSalvar_Click(object sender, EventArgs e)
+{
+    agenda.Adicionar(new Contato { Nome = txtNome.Text, Telefone = txtTelefone.Text });
+    Mostrar(&quot;&quot;);   // &quot;&quot; traz todos, pois todo texto contém &quot;&quot;
+}
+
+// TextChanged dispara a cada letra digitada: busca em tempo real!
+private void txtBusca_TextChanged(object sender, EventArgs e)
+{
+    Mostrar(txtBusca.Text);
+}
+
+private void Mostrar(string termo)
+{
+    dgvContatos.DataSource = agenda.Buscar(termo);
+}</code></pre></div></div><div class="tip">💡 Precisa de <code>using System.Linq;</code>. O formulário não sabe <i>como</i> a busca funciona, só pede o resultado.</div><div class="desafio">🏆 <b>Desafio:</b> Impeça nomes duplicados e implemente o botão “Remover” usando a linha selecionada.</div><div class="pager"><a href="projeto7.html">← Projeto 7</a><a href="projeto9.html">Projeto 9 →</a></div></main><footer>Material autoinstrucional · Desenvolvimento de Sistemas · C#</footer></body></html>

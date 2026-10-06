@@ -1,0 +1,30 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Conceitos · C# POO e Windows Forms</title><link rel="stylesheet" href="style.css"></head><body><header><nav><a class="logo" href="index.html">🧩 C# · POO &amp; Windows Forms</a><a href="conceitos.html">Conceitos</a><a href="windowsforms.html">Windows Forms</a><a href="index.html#projetos">Projetos</a></nav></header><main><h1>Conceitos de POO</h1><p>POO organiza o programa em <b>objetos</b> que representam coisas do mundo real, com dados e comportamentos.</p>
+<table><tr><th>Conceito</th><th>Ideia</th><th>Exemplo</th></tr>
+<tr><td>Classe</td><td>Molde do objeto</td><td><code>class Carro</code></td></tr>
+<tr><td>Objeto</td><td>Instância da classe</td><td><code>new Carro()</code></td></tr>
+<tr><td>Propriedade</td><td>Dados do objeto</td><td><code>Cor</code>, <code>Placa</code></td></tr>
+<tr><td>Método</td><td>Ação do objeto</td><td><code>Acelerar()</code></td></tr>
+<tr><td>Construtor</td><td>Prepara o objeto ao criar</td><td><code>public Carro(string cor)</code></td></tr>
+<tr><td>Encapsulamento</td><td>Proteger dados</td><td><code>private</code> + validação</td></tr>
+<tr><td>Herança</td><td>Reaproveitar classe</td><td><code>class Moto : Veiculo</code></td></tr>
+<tr><td>Polimorfismo</td><td>Mesmo método, comportamentos diferentes</td><td><code>virtual</code>/<code>override</code></td></tr>
+<tr><td>Abstração</td><td>Contrato sem implementação</td><td><code>abstract</code></td></tr></table>
+<h2>Exemplo mínimo</h2><pre><code>public class Cachorro
+{
+    // Propriedade: o dado do objeto
+    public string Nome { get; set; }
+
+    // Método: o comportamento do objeto
+    public void Latir()
+    {
+        MessageBox.Show(Nome + &quot; diz: Au au!&quot;);
+    }
+}
+
+// Uso (por exemplo, dentro do clique de um botão):
+Cachorro c = new Cachorro();  // cria o objeto
+c.Nome = &quot;Rex&quot;;               // altera a propriedade
+c.Latir();                    // chama o método</code></pre>
+<h2>Windows Forms em 1 minuto</h2><ul><li><b>Toolbox:</b> arraste controles (<code>Button</code>, <code>TextBox</code>, <code>Label</code>).</li><li><b>Propriedades:</b> mude <code>Name</code> e <code>Text</code>. Use prefixos: <code>txtNome</code>, <code>btnSalvar</code>, <code>lblResultado</code>.</li><li><b>Eventos:</b> clique duplo no botão cria o <code>Click</code>.</li></ul>
+<div class="tip">💡 Classes em <b>PascalCase</b>, uma classe por arquivo, e o formulário só <i>chama</i> as classes, sem conter as regras de negócio.</div>
+<div class="pager"><span></span><a href="windowsforms.html">Windows Forms →</a></div></main><footer>Material autoinstrucional · Desenvolvimento de Sistemas · C#</footer></body></html>

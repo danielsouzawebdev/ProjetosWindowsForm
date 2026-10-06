@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Projeto 3 · C# POO e Windows Forms</title><link rel="stylesheet" href="style.css"></head><body><header><nav><a class="logo" href="index.html">🧩 C# · POO &amp; Windows Forms</a><a href="conceitos.html">Conceitos</a><a href="windowsforms.html">Windows Forms</a><a href="index.html#projetos">Projetos</a></nav></header><main><span class="tag">Iniciante</span><h1>Projeto 3 · Conversor de Temperatura</h1><p><b>Objetivo:</b> usar uma classe utilitária com métodos <code>static</code>.</p><div class="steps"><div class="step"><h3>Tela</h3><p><code>txtValor</code>, <code>cmbModo</code> (Items: <i>C para F</i>, <i>C para K</i>, <i>F para C</i>), <code>btnConverter</code>, <code>lblResultado</code>.</p></div><div class="step"><h3>Classe estática</h3><pre><code>// static class: não se cria objeto com new, usamos direto Conversor.Metodo().
+// Ideal para funções utilitárias que não guardam dados.
+public static class Conversor
+{
+    public static double CelsiusParaFahrenheit(double c) =&gt; c * 9 / 5 + 32;
+    public static double CelsiusParaKelvin(double c)     =&gt; c + 273.15;
+    public static double FahrenheitParaCelsius(double f) =&gt; (f - 32) * 5 / 9;
+}</code></pre></div><div class="step"><h3>Botão</h3><pre><code>private void btnConverter_Click(object sender, EventArgs e)
+{
+    if (!double.TryParse(txtValor.Text, out double valor))
+    {
+        MessageBox.Show(&quot;Valor inválido.&quot;);
+        return;
+    }
+
+    double resultado;
+
+    // switch escolhe o caminho conforme o texto selecionado no ComboBox.
+    switch (cmbModo.Text)
+    {
+        case &quot;C para F&quot;: resultado = Conversor.CelsiusParaFahrenheit(valor); break;
+        case &quot;C para K&quot;: resultado = Conversor.CelsiusParaKelvin(valor);     break;
+        case &quot;F para C&quot;: resultado = Conversor.FahrenheitParaCelsius(valor); break;
+        default:
+            MessageBox.Show(&quot;Escolha uma conversão.&quot;);
+            return;
+    }
+    lblResultado.Text = resultado.ToString(&quot;F1&quot;);
+}</code></pre></div></div><div class="tip">💡 Métodos <code>static</code> pertencem à classe, não ao objeto. <code>Math.Sqrt()</code> é um exemplo que você já usa.</div><div class="desafio">🏆 <b>Desafio:</b> Inclua Kelvin para Celsius e um botão que inverte a conversão escolhida.</div><div class="pager"><a href="projeto2.html">← Projeto 2</a><a href="projeto4.html">Projeto 4 →</a></div></main><footer>Material autoinstrucional · Desenvolvimento de Sistemas · C#</footer></body></html>
